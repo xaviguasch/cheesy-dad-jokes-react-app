@@ -38,6 +38,7 @@ class JokeList extends Component {
         let newJoke = res.data.joke
         if (!this.seenJokes.has(newJoke)) {
           jokes.push({ id: uuid(), text: newJoke, votes: 0 })
+          this.seenJokes.add(newJoke.id)
         } else {
           console.log('found a duplicate')
           console.log(newJoke)
@@ -52,6 +53,8 @@ class JokeList extends Component {
       )
     } catch (e) {
       alert(e)
+
+      this.setState({ loading: false })
     }
   }
 
