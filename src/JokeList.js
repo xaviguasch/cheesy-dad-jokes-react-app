@@ -37,8 +37,8 @@ class JokeList extends Component {
 
         let newJoke = res.data.joke
         if (!this.seenJokes.has(newJoke)) {
+          this.seenJokes.add(newJoke)
           jokes.push({ id: uuid(), text: newJoke, votes: 0 })
-          this.seenJokes.add(newJoke.id)
         } else {
           console.log('found a duplicate')
           console.log(newJoke)
@@ -79,33 +79,35 @@ class JokeList extends Component {
           <h1 className='JokeList-title'>Loading...</h1>
         </div>
       )
-    } else {
-      return (
-        <div className='JokeList'>
-          <div className='JokeList-sidebar'>
-            <h1 className='JokeList-title'>
-              <span>Dad</span> Jokes
-            </h1>
-            <img src='https://assets.dryicons.com/uploads/icon/svg/8927/0eb14c71-38f2-433a-bfc8-23d9c99b3647.svg' />
-            <button className='JokeList-getmore' onClick={this.handleClick}>
-              New Jokes
-            </button>
-          </div>
-
-          <div className='JokeList-jokes'>
-            {this.state.jokes.map(j => (
-              <Joke
-                key={j.id}
-                votes={j.votes}
-                text={j.text}
-                upvote={() => this.handleVote(j.id, 1)}
-                downvote={() => this.handleVote(j.id, -1)}
-              />
-            ))}
-          </div>
-        </div>
-      )
     }
+
+    let jokes = this.state.jokes.sort((a, b) => b.votes - a.votes)
+
+    return (
+      <div className='JokeList'>
+        <div className='JokeList-sidebar'>
+          <h1 className='JokeList-title'>
+            <span>Dad</span> Jokes
+          </h1>
+          <img src='https://assets.dryicons.com/uploads/icon/svg/8927/0eb14c71-38f2-433a-bfc8-23d9c99b3647.svg' />
+          <button className='JokeList-getmore' onClick={this.handleClick}>
+            New Jokes
+          </button>
+        </div>
+
+        <div className='JokeList-jokes'>
+          {jokes.map(j => (
+            <Joke
+              key={j.id}
+              votes={j.votes}
+              text={j.text}
+              upvote={() => this.handleVote(j.id, 1)}
+              downvote={() => this.handleVote(j.id, -1)}
+            />
+          ))}
+        </div>
+      </div>
+    )
   }
 }
 
